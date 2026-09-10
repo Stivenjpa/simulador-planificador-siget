@@ -367,97 +367,156 @@ procesos_prioridad = [
 # EJECUCIÓN
 # ==================================================
 
+# ==================================================
+# MENÚ PRINCIPAL
+# ==================================================
+
 print("\n======================================================")
 print("       SIMULADOR DEL PLANIFICADOR CPU - SIGET")
 print("======================================================")
 
 mostrar_procesos(procesos_rr)
 
-resultados_rr = round_robin(procesos_rr, 2)
+print("\nSeleccione el algoritmo:")
+print("1. Round Robin")
+print("2. Prioridad")
+print("3. Ejecutar ambos")
+print("4. Salir")
 
-resultados_prioridad = prioridad(procesos_prioridad)
+opcion = input("\nIngrese una opción: ")
+
+if opcion == "1":
+    resultados_rr = round_robin(procesos_rr, 2)
+
+elif opcion == "2":
+    resultados_prioridad = prioridad(procesos_prioridad)
+
+elif opcion == "3":
+    resultados_rr = round_robin(procesos_rr, 2)
+    resultados_prioridad = prioridad(procesos_prioridad)
+
+elif opcion == "4":
+    print("\nPrograma finalizado.")
+
+else:
+    print("\nOpción no válida.")
 
 
 # ==================================================
-# COMPARACIÓN
+# RESULTADOS Y COMPARACIÓN
 # ==================================================
 
-promedio_respuesta_rr = sum(
-    p.tiempo_respuesta for p in resultados_rr
-) / len(resultados_rr)
+if opcion == "3":
 
-promedio_espera_rr = sum(
-    p.tiempo_espera for p in resultados_rr
-) / len(resultados_rr)
+        # ==================================================
+    # CALCULAR PROMEDIOS
+    # ==================================================
 
-promedio_respuesta_prioridad = sum(
-    p.tiempo_respuesta for p in resultados_prioridad
-) / len(resultados_prioridad)
+    promedio_respuesta_rr = sum(
+        p.tiempo_respuesta for p in resultados_rr
+    ) / len(resultados_rr)
 
-promedio_espera_prioridad = sum(
-    p.tiempo_espera for p in resultados_prioridad
-) / len(resultados_prioridad)
+    promedio_espera_rr = sum(
+        p.tiempo_espera for p in resultados_rr
+    ) / len(resultados_rr)
 
+    promedio_respuesta_prioridad = sum(
+        p.tiempo_respuesta for p in resultados_prioridad
+    ) / len(resultados_prioridad)
 
-# ==================================================
-# TABLA FINAL DE PROCESOS
-# ==================================================
+    promedio_espera_prioridad = sum(
+        p.tiempo_espera for p in resultados_prioridad
+    ) / len(resultados_prioridad)
 
-print("\n======================================================")
-print("              ESTADO FINAL DE LOS PROCESOS")
-print("======================================================")
+    # ==================================================
+    # TABLA FINAL DE PROCESOS
+    # ==================================================
 
-print(
-    f"{'Proceso':<10}"
-    f"{'Tarea':<25}"
-    f"{'Estado':<15}"
-    f"{'Prioridad':<12}"
-    f"{'Respuesta':<12}"
-    f"{'Finalización':<15}"
-    f"{'Espera':<10}"
-)
+    print("\n======================================================")
+    print("              ESTADO FINAL DE LOS PROCESOS")
+    print("======================================================")
 
-print("-" * 99)
-
-for proceso in resultados_rr:
     print(
-        f"{proceso.nombre:<10}"
-        f"{proceso.tarea:<25}"
-        f"{proceso.estado:<15}"
-        f"{proceso.prioridad:<12}"
-        f"{proceso.tiempo_respuesta:<12}s"
-        f"{proceso.tiempo_finalizacion:<15}s"
-        f"{proceso.tiempo_espera:<10}s"
+        f"{'Proceso':<10}"
+        f"{'Tarea':<25}"
+        f"{'Estado':<15}"
+        f"{'Prioridad':<12}"
+        f"{'Respuesta':<12}"
+        f"{'Finalización':<15}"
+        f"{'Espera':<10}"
+    )
+
+    print("-" * 99)
+
+    for proceso in resultados_rr:
+        print(
+            f"{proceso.nombre:<10}"
+            f"{proceso.tarea:<25}"
+            f"{proceso.estado:<15}"
+            f"{proceso.prioridad:<12}"
+            f"{proceso.tiempo_respuesta:<12}s"
+            f"{proceso.tiempo_finalizacion:<15}s"
+            f"{proceso.tiempo_espera:<10}s"
+        )
+
+    # ==================================================
+    # PROMEDIOS
+    # ==================================================
+
+    promedio_respuesta_rr = sum(
+        p.tiempo_respuesta for p in resultados_rr
+    ) / len(resultados_rr)
+
+    promedio_espera_rr = sum(
+        p.tiempo_espera for p in resultados_rr
+    ) / len(resultados_rr)
+
+    promedio_respuesta_prioridad = sum(
+        p.tiempo_respuesta for p in resultados_prioridad
+    ) / len(resultados_prioridad)
+
+    promedio_espera_prioridad = sum(
+        p.tiempo_espera for p in resultados_prioridad
+    ) / len(resultados_prioridad)
+
+    # ==================================================
+    # COMPARACIÓN DE ALGORITMOS
+    # ==================================================
+
+    print("\n======================================================")
+    print("             COMPARACIÓN DE ALGORITMOS")
+    print("======================================================")
+
+    print(
+        f"\n{'Métrica':<25}"
+        f"{'Round Robin':<18}"
+        f"{'Prioridad':<18}"
+    )
+
+    print("-" * 61)
+
+    print(
+        f"{'Promedio respuesta':<25}"
+        f"{promedio_respuesta_rr:<18.2f}"
+        f"{promedio_respuesta_prioridad:<18.2f}"
+    )
+
+    print(
+        f"{'Promedio espera':<25}"
+        f"{promedio_espera_rr:<18.2f}"
+        f"{promedio_espera_prioridad:<18.2f}"
     )
 
 
-# ==================================================
-# COMPARACIÓN DE ALGORITMOS
-# ==================================================
+elif opcion == "1":
 
-print("\n======================================================")
-print("             COMPARACIÓN DE ALGORITMOS")
-print("======================================================")
+    print("\nRound Robin ejecutado correctamente.")
 
-print(
-    f"\n{'Métrica':<25}"
-    f"{'Round Robin':<18}"
-    f"{'Prioridad':<18}"
-)
 
-print("-" * 61)
+elif opcion == "2":
 
-print(
-    f"{'Promedio respuesta':<25}"
-    f"{promedio_respuesta_rr:<18.2f}"
-    f"{promedio_respuesta_prioridad:<18.2f}"
-)
+    print("\nPlanificación por Prioridad ejecutada correctamente.")
 
-print(
-    f"{'Promedio espera':<25}"
-    f"{promedio_espera_rr:<18.2f}"
-    f"{promedio_espera_prioridad:<18.2f}"
-)
 
 print("\n======================================================")
 print("                 SIMULACIÓN FINALIZADA")
