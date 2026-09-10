@@ -399,6 +399,42 @@ promedio_espera_prioridad = sum(
 ) / len(resultados_prioridad)
 
 
+# ==================================================
+# TABLA FINAL DE PROCESOS
+# ==================================================
+
+print("\n======================================================")
+print("              ESTADO FINAL DE LOS PROCESOS")
+print("======================================================")
+
+print(
+    f"{'Proceso':<10}"
+    f"{'Tarea':<25}"
+    f"{'Estado':<15}"
+    f"{'Prioridad':<12}"
+    f"{'Respuesta':<12}"
+    f"{'Finalización':<15}"
+    f"{'Espera':<10}"
+)
+
+print("-" * 99)
+
+for proceso in resultados_rr:
+    print(
+        f"{proceso.nombre:<10}"
+        f"{proceso.tarea:<25}"
+        f"{proceso.estado:<15}"
+        f"{proceso.prioridad:<12}"
+        f"{proceso.tiempo_respuesta:<12}s"
+        f"{proceso.tiempo_finalizacion:<15}s"
+        f"{proceso.tiempo_espera:<10}s"
+    )
+
+
+# ==================================================
+# COMPARACIÓN DE ALGORITMOS
+# ==================================================
+
 print("\n======================================================")
 print("             COMPARACIÓN DE ALGORITMOS")
 print("======================================================")
