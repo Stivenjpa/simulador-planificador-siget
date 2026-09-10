@@ -49,13 +49,33 @@ def round_robin(procesos, quantum):
     tiempo = 0
     cola = []
     procesos_pendientes = procesos.copy()
+    bloqueados = []
 
     print("\n==============================================")
     print("              ROUND ROBIN")
     print("==============================================")
     print(f"\nQuantum: {quantum} segundos\n")
 
-    while cola or procesos_pendientes:
+    while cola or procesos_pendientes or bloqueados:
+
+        # ------------------------------------------
+        # Liberar procesos bloqueados
+        # ------------------------------------------
+
+        for proceso, tiempo_desbloqueo in bloqueados[:]:
+            if tiempo >= tiempo_desbloqueo:
+                proceso.cambiar_estado("Listo")
+                cola.append(proceso)
+                bloqueados.remove((proceso, tiempo_desbloqueo))
+
+                print(
+                    f"Tiempo {tiempo}: "
+                    f"{proceso.nombre} -> Bloqueado -> Listo"
+                )
+
+        # ------------------------------------------
+        # Agregar procesos que ya llegaron
+        # ------------------------------------------
 
         for proceso in procesos_pendientes[:]:
             if proceso.tiempo_irrupcion <= tiempo:
@@ -68,18 +88,34 @@ def round_robin(procesos, quantum):
                     f"{proceso.nombre} -> Nuevo -> Listo"
                 )
 
+        # ------------------------------------------
+        # Si no hay procesos listos
+        # ------------------------------------------
+
         if not cola:
             tiempo += 1
             continue
 
+        # ------------------------------------------
+        # Tomar proceso de la cola
+        # ------------------------------------------
+
         proceso = cola.pop(0)
         proceso.cambiar_estado("En ejecución")
+
+        # ------------------------------------------
+        # Registrar primera ejecución
+        # ------------------------------------------
 
         if proceso.primer_inicio is None:
             proceso.primer_inicio = tiempo
             proceso.tiempo_respuesta = (
                 tiempo - proceso.tiempo_irrupcion
             )
+
+        # ------------------------------------------
+        # Ejecutar durante el quantum
+        # ------------------------------------------
 
         tiempo_ejecucion = min(
             quantum,
@@ -95,7 +131,33 @@ def round_robin(procesos, quantum):
         proceso.tiempo_restante -= tiempo_ejecucion
         tiempo += tiempo_ejecucion
 
-        if proceso.tiempo_restante > 0:
+        # ------------------------------------------
+        # Simular bloqueo de P2
+        # ------------------------------------------
+
+        if (
+            proceso.nombre == "P2"
+            and proceso.tiempo_restante > 0
+            and proceso.tiempo_restante == 5
+        ):
+            proceso.cambiar_estado("Bloqueado")
+
+            tiempo_desbloqueo = tiempo + 2
+
+            bloqueados.append(
+                (proceso, tiempo_desbloqueo)
+            )
+
+            print(
+                f"{proceso.nombre} -> Bloqueado "
+                f"(esperando datos de sensores)"
+            )
+
+        # ------------------------------------------
+        # Si todavía necesita CPU
+        # ------------------------------------------
+
+        elif proceso.tiempo_restante > 0:
             proceso.cambiar_estado("Listo")
             cola.append(proceso)
 
@@ -103,6 +165,10 @@ def round_robin(procesos, quantum):
                 f"{proceso.nombre} -> Listo "
                 f"(restan {proceso.tiempo_restante} segundos)"
             )
+
+        # ------------------------------------------
+        # Si terminó
+        # ------------------------------------------
 
         else:
             proceso.cambiar_estado("Terminado")
@@ -113,12 +179,20 @@ def round_robin(procesos, quantum):
                 f"en t={tiempo}"
             )
 
+    # ------------------------------------------
+    # Calcular tiempo de espera
+    # ------------------------------------------
+
     for proceso in procesos:
         proceso.tiempo_espera = (
             proceso.tiempo_finalizacion
             - proceso.tiempo_irrupcion
             - proceso.tiempo_cpu
         )
+
+    # ------------------------------------------
+    # Mostrar resultados
+    # ------------------------------------------
 
     print("\n==============================================")
     print("         RESULTADOS ROUND ROBIN")
@@ -142,7 +216,6 @@ def round_robin(procesos, quantum):
         )
 
     return procesos
-
 
 def prioridad(procesos):
     tiempo = 0
