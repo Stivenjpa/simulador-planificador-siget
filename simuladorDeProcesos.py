@@ -45,6 +45,64 @@ def mostrar_procesos(procesos):
         )
 
 
+# ==================================================
+# PROCESOS DEL SIGET
+# ==================================================
+
+procesos_rr = [
+    Proceso(
+        "P1",
+        "Detectar accidente",
+        0,
+        1,
+        500,
+        5
+    ),
+    Proceso(
+        "P2",
+        "Analizar trafico",
+        1,
+        3,
+        1000,
+        7
+    ),
+    Proceso(
+        "P3",
+        "Controlar semaforos",
+        2,
+        2,
+        300,
+        4
+    )
+]
+
+procesos_prioridad = [
+    Proceso(
+        "P1",
+        "Detectar accidente",
+        0,
+        1,
+        500,
+        5
+    ),
+    Proceso(
+        "P2",
+        "Analizar trafico",
+        1,
+        3,
+        1000,
+        7
+    ),
+    Proceso(
+        "P3",
+        "Controlar semaforos",
+        2,
+        2,
+        300,
+        4
+    )
+]
+
 def round_robin(procesos, quantum):
     tiempo = 0
     cola = []
@@ -304,63 +362,6 @@ def prioridad(procesos):
     return procesos
 
 
-# ==================================================
-# PROCESOS DEL SIGET
-# ==================================================
-
-procesos_rr = [
-    Proceso(
-        "P1",
-        "Detectar accidente",
-        0,
-        1,
-        500,
-        5
-    ),
-    Proceso(
-        "P2",
-        "Analizar trafico",
-        1,
-        3,
-        1000,
-        7
-    ),
-    Proceso(
-        "P3",
-        "Controlar semaforos",
-        2,
-        2,
-        300,
-        4
-    )
-]
-
-procesos_prioridad = [
-    Proceso(
-        "P1",
-        "Detectar accidente",
-        0,
-        1,
-        500,
-        5
-    ),
-    Proceso(
-        "P2",
-        "Analizar trafico",
-        1,
-        3,
-        1000,
-        7
-    ),
-    Proceso(
-        "P3",
-        "Controlar semaforos",
-        2,
-        2,
-        300,
-        4
-    )
-]
 
 
 # ==================================================
@@ -408,7 +409,7 @@ else:
 
 if opcion == "3":
 
-        # ==================================================
+    # ==================================================
     # CALCULAR PROMEDIOS
     # ==================================================
 
